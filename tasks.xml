@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Hier kommen die Tasks-->
+<taskset xmlns="http://www.tmsxmlns.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.tmsxmlns.com taskset.xsd">
+
+  <periodictask>
+    <id>1</id>
+    <executiontime>3</executiontime>
+    <criticaltime>3</criticaltime>
+    <ucfirmrt/>
+    <uawmean>
+      <size>10</size>
+    </uawmean>
+    <priority>1</priority>
+    <period>4</period>
+    <offset>0</offset>
+  </periodictask>
+
+
+  <periodictask>
+    <id>2</id>
+    <executiontime>2</executiontime>
+    <criticaltime>2</criticaltime>
+    <ucfirmrt/>
+    <uawmean>
+      <size>10</size>
+    </uawmean>
+    <priority>1</priority>
+    <period>16</period>
+    <offset>0</offset>
+  </periodictask>
+
+
+  <periodictask>
+    <id>3</id>
+    <executiontime>3</executiontime>
+    <criticaltime>3</criticaltime>
+    <ucfirmrt/>
+    <uawmean>
+      <size>10</size>
+    </uawmean>
+    <priority>1</priority>
+    <period>15</period>
+    <offset>0</offset>
+  </periodictask>
+
+
+  <periodictask>
+    <id>4</id>
+    <executiontime>1</executiontime>
+    <criticaltime>1</criticaltime>
+    <ucfirmrt/>
+    <uawmean>
+      <size>10</size>
+    </uawmean>
+    <priority>1</priority>
+    <period>10</period>
+    <offset>0</offset>
+  </periodictask>
+
+
+  <periodictask>
+    <id>5</id>
+    <executiontime>3</executiontime>
+    <criticaltime>3</criticaltime>
+    <ucfirmrt/>
+    <uawmean>
+      <size>10</size>
+    </uawmean>
+    <priority>1</priority>
+    <period>14</period>
+    <offset>0</offset>
+  </periodictask>
+
+
+  <periodictask>
+    <id>6</id>
+    <executiontime>3</executiontime>
+    <criticaltime>3</criticaltime>
+    <ucfirmrt/>
+    <uawmean>
+      <size>10</size>
+    </uawmean>
+    <priority>1</priority>
+    <period>2</period>
+    <offset>0</offset>
+  </periodictask>
+
+
+  <periodictask>
+    <id>7</id>
+    <executiontime>2</executiontime>
+    <criticaltime>2</criticaltime>
+    <ucfirmrt/>
+    <uawmean>
+      <size>10</size>
+    </uawmean>
+    <priority>1</priority>
+    <period>8</period>
+    <offset>0</offset>
+  </periodictask>
+
+
+  <periodictask>
+    <id>8</id>
+    <executiontime>1</executiontime>
+    <criticaltime>1</criticaltime>
+    <ucfirmrt/>
+    <uawmean>
+      <size>10</size>
+    </uawmean>
+    <priority>1</priority>
+    <period>9</period>
+    <offset>0</offset>
+  </periodictask>
+
+
+  <periodictask>
+    <id>9</id>
+    <executiontime>4</executiontime>
+    <criticaltime>4</criticaltime>
+    <ucfirmrt/>
+    <uawmean>
+      <size>10</size>
+    </uawmean>
+    <priority>1</priority>
+    <period>17</period>
+    <offset>0</offset>
+  </periodictask>
+
+
+  <periodictask>
+    <id>10</id>
+    <executiontime>4</executiontime>
+    <criticaltime>4</criticaltime>
+    <ucfirmrt/>
+    <uawmean>
+      <size>10</size>
+    </uawmean>
+    <priority>1</priority>
+    <period>11</period>
+    <offset>0</offset>
+  </periodictask>
+
+
+  <periodictask>
+    <id>11</id>
+    <executiontime>4</executiontime>
+    <criticaltime>4</criticaltime>
+    <ucfirmrt/>
+    <uawmean>
+      <size>10</size>
+    </uawmean>
+    <priority>1</priority>
+    <period>18</period>
+    <offset>0</offset>
+  </periodictask>
+
+
+  <periodictask>
+    <id>12</id>
+    <executiontime>3</executiontime>
+    <criticaltime>3</criticaltime>
+    <ucfirmrt/>
+    <uawmean>
+      <size>10</size>
+    </uawmean>
+    <priority>1</priority>
+    <period>12</period>
+    <offset>0</offset>
+  </periodictask>
+
+
+  <periodictask>
+    <id>13</id>
+    <executiontime>5</executiontime>
+    <criticaltime>5</criticaltime>
+    <ucfirmrt/>
+    <uawmean>
+      <size>10</size>
+    </uawmean>
+    <priority>1</priority>
+    <period>2</period>
+    <offset>0</offset>
+  </periodictask>
+
+
+  <periodictask>
+    <id>14</id>
+    <executiontime>1</executiontime>
+    <criticaltime>1</criticaltime>
+    <ucfirmrt/>
+    <uawmean>
+      <size>10</size>
+    </uawmean>
+    <priority>1</priority>
+    <period>8</period>
+    <offset>0</offset>
+  </periodictask>
+
+
+  <periodictask>
+    <id>15</id>
+    <executiontime>1</executiontime>
+    <criticaltime>1</criticaltime>
+    <ucfirmrt/>
+    <uawmean>
+      <size>10</size>
+    </uawmean>
+    <priority>1</priority>
+    <period>12</period>
+    <offset>0</offset>
+  </periodictask>
+
+
+  <periodictask>
+    <id>16</id>
+    <executiontime>5</executiontime>
+    <criticaltime>5</criticaltime>
+    <ucfirmrt/>
+    <uawmean>
+      <size>10</size>
+    </uawmean>
+    <priority>1</priority>
+    <period>2</period>
+    <offset>0</offset>
+  </periodictask>
+
+
+  <periodictask>
+    <id>17</id>
+    <executiontime>2</executiontime>
+    <criticaltime>2</criticaltime>
+    <ucfirmrt/>
+    <uawmean>
+      <size>10</size>
+    </uawmean>
+    <priority>1</priority>
+    <period>8</period>
+    <offset>0</offset>
+  </periodictask>
+
+
+  <periodictask>
+    <id>18</id>
+    <executiontime>2</executiontime>
+    <criticaltime>2</criticaltime>
+    <ucfirmrt/>
+    <uawmean>
+      <size>10</size>
+    </uawmean>
+    <priority>1</priority>
+    <period>19</period>
+    <offset>0</offset>
+  </periodictask>
+
+
+  <periodictask>
+    <id>19</id>
+    <executiontime>3</executiontime>
+    <criticaltime>3</criticaltime>
+    <ucfirmrt/>
+    <uawmean>
+      <size>10</size>
+    </uawmean>
+    <priority>1</priority>
+    <period>6</period>
+    <offset>0</offset>
+  </periodictask>
+
+
+  <periodictask>
+    <id>20</id>
+    <executiontime>5</executiontime>
+    <criticaltime>5</criticaltime>
+    <ucfirmrt/>
+    <uawmean>
+      <size>10</size>
+    </uawmean>
+    <priority>1</priority>
+    <period>16</period>
+    <offset>0</offset>
+  </periodictask>
+
+
+  <periodictask>
+    <id>21</id>
+    <executiontime>3</executiontime>
+    <criticaltime>3</criticaltime>
+    <ucfirmrt/>
+    <uawmean>
+      <size>10</size>
+    </uawmean>
+    <priority>1</priority>
+    <period>17</period>
+    <offset>0</offset>
+  </periodictask>
+
+
+  <periodictask>
+    <id>22</id>
+    <executiontime>4</executiontime>
+    <criticaltime>4</criticaltime>
+    <ucfirmrt/>
+    <uawmean>
+      <size>10</size>
+    </uawmean>
+    <priority>1</priority>
+    <period>16</period>
+    <offset>0</offset>
+  </periodictask>
+
+
+  <periodictask>
+    <id>23</id>
+    <executiontime>3</executiontime>
+    <criticaltime>3</criticaltime>
+    <ucfirmrt/>
+    <uawmean>
+      <size>10</size>
+    </uawmean>
+    <priority>1</priority>
+    <period>19</period>
+    <offset>0</offset>
+  </periodictask>
+
+
+  <periodictask>
+    <id>24</id>
+    <executiontime>4</executiontime>
+    <criticaltime>4</criticaltime>
+    <ucfirmrt/>
+    <uawmean>
+      <size>10</size>
+    </uawmean>
+    <priority>1</priority>
+    <period>12</period>
+    <offset>0</offset>
+  </periodictask>
+
+
+  <periodictask>
+    <id>25</id>
+    <executiontime>3</executiontime>
+    <criticaltime>3</criticaltime>
+    <ucfirmrt/>
+    <uawmean>
+      <size>10</size>
+    </uawmean>
+    <priority>1</priority>
+    <period>15</period>
+    <offset>0</offset>
+  </periodictask>
+
+
+  <periodictask>
+    <id>26</id>
+    <executiontime>3</executiontime>
+    <criticaltime>3</criticaltime>
+    <ucfirmrt/>
+    <uawmean>
+      <size>10</size>
+    </uawmean>
+    <priority>1</priority>
+    <period>12</period>
+    <offset>0</offset>
+  </periodictask>
+
+
+  <periodictask>
+    <id>27</id>
+    <executiontime>2</executiontime>
+    <criticaltime>2</criticaltime>
+    <ucfirmrt/>
+    <uawmean>
+      <size>10</size>
+    </uawmean>
+    <priority>1</priority>
+    <period>12</period>
+    <offset>0</offset>
+  </periodictask>
+
+
+  <periodictask>
+    <id>28</id>
+    <executiontime>2</executiontime>
+    <criticaltime>2</criticaltime>
+    <ucfirmrt/>
+    <uawmean>
+      <size>10</size>
+    </uawmean>
+    <priority>1</priority>
+    <period>12</period>
+    <offset>0</offset>
+  </periodictask>
+
+
+  <periodictask>
+    <id>29</id>
+    <executiontime>3</executiontime>
+    <criticaltime>3</criticaltime>
+    <ucfirmrt/>
+    <uawmean>
+      <size>10</size>
+    </uawmean>
+    <priority>1</priority>
+    <period>1</period>
+    <offset>0</offset>
+  </periodictask>
+
+
+  <periodictask>
+    <id>30</id>
+    <executiontime>2</executiontime>
+    <criticaltime>2</criticaltime>
+    <ucfirmrt/>
+    <uawmean>
+      <size>10</size>
+    </uawmean>
+    <priority>1</priority>
+    <period>19</period>
+    <offset>0</offset>
+  </periodictask>
+
+</taskset>
