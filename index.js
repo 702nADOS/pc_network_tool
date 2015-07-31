@@ -38,4 +38,4 @@ var exampleTask = tasks.taskset.periodictask[0];
 
 var client = new dom0_client();
 client.init(server_details);
-client.sendControl(magic_numbers.control);
+client.sendLua("print 'hello';");
