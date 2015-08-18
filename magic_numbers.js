@@ -1,5 +1,7 @@
 module.exports = {
     control : 0xC047201, // client wants to send control message
+    task_desc : 0xDE5, // client wants to send task description
+    send_binaries : 0xDE5F11E, // client watns to send binaries
     lua : 0x10A, // client wants to send LUA command
     lua_ok : 0x10A900D, // possible reply to LUA command
     lua_err : 0x10ABAD, // possible reply to LUA command

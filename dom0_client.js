@@ -12,6 +12,7 @@ function getInt32LE(hex){
   return buf;
 }
 
+/*
 /* the dom0_client that we could require
  * and create/remove operations
  */
@@ -19,9 +20,8 @@ function getInt32LE(hex){
 var net = require('net'),
     debug = require('./debug.js'),
     sleep = require('node-sleep').sleep,
-    EventEmitter = require( "events" ).EventEmitter;
-    ;
-
+    EventEmitter = require( "events" ).EventEmitter,
+    fs = require('fs');
 
 var dom0_client = function() {
   this.server_details = {}; // JS Object, details of the client Server, host and port
@@ -33,7 +33,7 @@ var dom0_client = function() {
 
 // make the dom0 client inherit all the properties
 // of eventEmitter
-dom0_client.prototype = new EventEmitter;
+dom0_client.prototype = new EventEmitter();
 
 /*
  * function init: initializes the communication and sets the channels
@@ -54,7 +54,8 @@ dom0_client.prototype.init = function(options) {
     client.emit('connected');
   });
   this.clientSocket.on('data', function(data) {
-    console.log( " == " + data.toString());
+    console.log( " == ");
+    console.log(data);
   });
 
   // start listening on a seperate port and create handlers for them as well.
@@ -131,7 +132,65 @@ dom0_client.prototype.sendBinary = function(binary) {
   sleep(3000);
 
   // TODO: wait for GO_SEND here. need to make these parts more elegant
-  this.clientSocket.write(binary);
+  this.clientSocket.write(binary, function(){
+    console.log("binary_sent");
+  });
+};
+
+/**
+ *  function sendTaskDescription: sends a task description to server
+ *           and then continues to send the binaries one by one.
+ *  parameters:
+ *    tasks : JSON representation of the tasks.xml file,
+ *            contains the list of tasks with some basic paramters
+ */
+dom0_client.prototype.sendTaskDescription = function(tasks){
+  debug.log('sending taskDescription to the server');
+
+  // Protocol :
+  //    - Send the magic numbers to send task description
+  //    - Send the length of the json task description
+  //    - Send the task description
+  //    - send the control agian
+  //    - sent magic number to send binaries
+  //    - send number of binaries to be sent
+  //    - for each Binary
+  //      * send binary name (4 byte)
+  //      * send binary length
+  //      * send binary
+  //      * LOOP
+
+/*
+  this.writeToClient(this.magic_numbers.task_desc);
+  var tasks_string = JSON.stringify(tasks);
+
+  console.log(tasks_string.length);
+
+  this.writeToClient(tasks_string.length);
+  this.writeToClient(tasks_string, false);
+*/
+
+  this.writeToClient(this.magic_numbers.send_binaries);
+  sleep(3000);
+  this.writeToClient(1);
+  sleep(3000);
+  this.writeToClient("avinash1", false);
+  var binary = fs.readFileSync('binaries/hello.elf');
+  sleep(6000);
+  debug.log('expecting an OK by this time');
+
+  this.clientSocket.write(getInt32LE(binary.length));
+
+
+  // TODO: wait for GO_SEND here. need to make these parts more elegant
+  this.clientSocket.write(binary, function(){
+    console.log("binary written");
+  });
+
+
+  //tasks.forEach(function(task, index){
+    //console.log(task.pkg);
+  //});
 };
 
 /*
@@ -139,7 +198,23 @@ dom0_client.prototype.sendBinary = function(binary) {
  *
  */
 dom0_client.prototype.close = function(){
-  this.clientSocket.end();
+  if(this.clientSocket)
+    this.clientSocket.end();
+};
+
+/**
+ *  Helper function to write a hex to the client. hex is converted to Int32LittleEndian format
+ *  parameter: hex
+ *             LE : if false then not converted to Low endian format
+ *
+ */
+dom0_client.prototype.writeToClient = function(hex, LE){
+  if(typeof LE === 'undefined') LE = true;
+
+  if (LE)
+    this.clientSocket.write(getInt32LE(hex));
+  else
+    this.clientSocket.write(hex);
 }
 
 module.exports = dom0_client;
