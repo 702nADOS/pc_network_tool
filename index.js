@@ -31,19 +31,31 @@ tasks = JSON.parse(tasks);
 
 //var binary = fs.readFileSync('binaries/hello.elf');
 var client = new dom0_client();
+
 client.init({server_details: server_details, mon_client: monitor_client_details});
+
 client.on('connected', function(){
   console.log('connected');
+  //client.sendLua('a=3');
+  //sleep(1000);
+  //client.sendLua('print(a)');
+  //sleep(1000);
+  //client.sendLua(" package.path = \"rom/?.lua\"; json=require('json')");
+  //sleep (1000);
   client.sendLua("print 'hello';");
   sleep(1000);
   client.sendTaskDescription(tasks.taskset.periodictask);
 
-  //console.log("sending message");
-  //client.sendBinary(binary);
-  sleep(30000);
-  client.sendLua("test = L4.default_loader:start({caps={l4re_ipc = L4.Env.l4re_ipc}},\"network\");");
+//  sleep(200000);
   //client.close();
 });
+
+process.stdin.on('data', function(){
+  console.log('got message');
+  //client.sendNextTask());
+  client.sendLua("test = L4.default_loader:start({caps={l4re_ipc = L4.Env.l4re_ipc}},\"avinash2:n\");");
+
+})
 
 /*
  * TASK EXAMPLE

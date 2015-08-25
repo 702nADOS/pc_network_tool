@@ -13,6 +13,22 @@ function getInt32LE(hex){
 }
 
 /*
+ * Helper function to test if buffers are equal
+ */
+function areBuffersEqual(bufA, bufB) {
+    var len = bufA.length;
+    if (len !== bufB.length) {
+        return false;
+    }
+    for (var i = 0; i < len; i++) {
+        if (bufA.readUInt8(i) !== bufB.readUInt8(i)) {
+            return false;
+        }
+    }
+    return true;
+}
+
+/*
 /* the dom0_client that we could require
  * and create/remove operations
  */
@@ -29,6 +45,7 @@ var dom0_client = function() {
   this.monitorSocket = null;
   this.connected = false;// BOOL, state of the connection
   this.magic_numbers = require('./magic_numbers.js'); // this file has all the communication protocol IDs
+  this.send_queue = [];
 };
 
 // make the dom0 client inherit all the properties
@@ -52,11 +69,23 @@ dom0_client.prototype.init = function(options) {
 
   this.clientSocket.on('connect', function(){
     client.emit('connected');
-  });
+  }.bind(this));
+
   this.clientSocket.on('data', function(data) {
-    console.log( " == ");
+
     console.log(data);
-  });
+    console.log(getInt32LE(this.magic_numbers['go_send']));
+
+    // if the client is ready to receive the next task binary
+    // send the next binary from the queue
+    //if(data.compare(getInt32LE(this.magic_numbers['go_send']))){
+    if(areBuffersEqual(data, getInt32LE(this.magic_numbers['go_send']))){
+      console.log('Client is ready to get next task')
+      this.sendNextTask();
+    }
+    //console.log(data);
+
+  }.bind(this));
 
   // start listening on a seperate port and create handlers for them as well.
   //this.monitorSocket = net.createServer(function(socket){
@@ -160,7 +189,7 @@ dom0_client.prototype.sendTaskDescription = function(tasks){
   //      * send binary
   //      * LOOP
 
-/*
+
   this.writeToClient(this.magic_numbers.task_desc);
   var tasks_string = JSON.stringify(tasks);
 
@@ -168,30 +197,57 @@ dom0_client.prototype.sendTaskDescription = function(tasks){
 
   this.writeToClient(tasks_string.length);
   this.writeToClient(tasks_string, false);
-*/
+
+  this.send_queue.push({
+    name : "avinash1",
+    binary_path : "binaries/hello.elf"
+  });
+  this.send_queue.push({
+    name : "avinash2",
+    binary_path : "binaries/tumatmul.elf"
+  });
 
   this.writeToClient(this.magic_numbers.send_binaries);
-  sleep(3000);
-  this.writeToClient(1);
-  sleep(3000);
-  this.writeToClient("avinash1", false);
-  var binary = fs.readFileSync('binaries/hello.elf');
-  sleep(6000);
-  debug.log('expecting an OK by this time');
+  this.writeToClient(2);
+  this.sendNextTask();
 
-  this.clientSocket.write(getInt32LE(binary.length));
+  //this.writeToClient("avinash1", false);
+  //var binary = fs.readFileSync('binaries/hello.elf');
+  //sleep(6000);
+  //this.clientSocket.write(getInt32LE(binary.length));
+  //this.clientSocket.write(binary, function(){
+    //console.log("hello written, writing tumatmul");
+    //sleep(10000);
+    //this.writeToClient("avinash2", false);
+    //var binary = fs.readFileSync('binaries/tumatmul.elf');
+    //sleep(6000);
+    //this.clientSocket.write(getInt32LE(binary.length));
+    //this.clientSocket.write(binary, function(){ console.log("tumatmul written"); });
+  //}.bind(this));
 
-
-  // TODO: wait for GO_SEND here. need to make these parts more elegant
-  this.clientSocket.write(binary, function(){
-    console.log("binary written");
-  });
 
 
   //tasks.forEach(function(task, index){
     //console.log(task.pkg);
   //});
 };
+
+/**
+ *  function sendNextTask: sends a task binary to the server
+ */
+dom0_client.prototype.sendNextTask = function(){
+  if(this.send_queue.length > 0)
+  {
+    var task = this.send_queue.pop();
+
+    var binary = fs.readFileSync(task.binary_path);
+
+    console.log('Writing binary, ' + task.name);
+    this.writeToClient(task.name, false);
+    this.clientSocket.write(getInt32LE(binary.length));
+    this.clientSocket.write(binary, function(){ console.log(task.name+" written"); }.bind(this));
+  }
+}
 
 /*
  * function close : closes the socket connection
@@ -215,6 +271,8 @@ dom0_client.prototype.writeToClient = function(hex, LE){
     this.clientSocket.write(getInt32LE(hex));
   else
     this.clientSocket.write(hex);
+
+  sleep(1000);
 }
 
 module.exports = dom0_client;
