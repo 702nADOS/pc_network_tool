@@ -21,41 +21,32 @@ var monitor_client_details = {
 var xml = fs.readFileSync(tasksFile);
 var tasks = xml2json.toJson(xml);
 tasks = JSON.parse(tasks);
+tasks = cleanup(tasks);
 
-// Loop through all the tasks
-// generate the binaries (most probably it is running a make command and copying the binary
-// connect to the client
-// send all the binaries
-// send json when you have to activate the task
-// XXX: JSON can be part of LUA as well
-
-//var binary = fs.readFileSync('binaries/hello.elf');
 var client = new dom0_client();
 
 client.init({server_details: server_details, mon_client: monitor_client_details});
 
 client.on('connected', function(){
   console.log('connected');
-  //client.sendLua('a=3');
-  //sleep(1000);
-  //client.sendLua('print(a)');
-  //sleep(1000);
   //client.sendLua(" package.path = \"rom/?.lua\"; json=require('json')");
   //sleep (1000);
   client.sendLua("print 'hello';");
-  sleep(1000);
-  client.sendTaskDescription(tasks.taskset.periodictask);
+  //sleep(1000);
+  client.sendTaskDescription(tasks);
 
 //  sleep(200000);
   //client.close();
 });
 
 process.stdin.on('data', function(){
-  console.log('got message');
+  //console.log('arguments');
+  //console.log('got message');
   //client.sendNextTask());
   client.sendLua("test = L4.default_loader:start({caps={l4re_ipc = L4.Env.l4re_ipc}},\"avinash2:n\");");
-
-})
+  //sleep(1000)
+  client.sendLua("test = L4.default_loader:start({caps={l4re_ipc = L4.Env.l4re_ipc}},\"avinash1:n\");");
+});
 
 /*
  * TASK EXAMPLE
@@ -64,8 +55,6 @@ process.stdin.on('data', function(){
   id: 1,
   executiontime: 3,
   criticaltime: 3,
-  ucfirmrt: {},
-  uawmean: { size: 10 },
   priority: 1,
   period: 4,
   offset: 0
@@ -74,4 +63,14 @@ process.stdin.on('data', function(){
 process.on('SIGINT', function(code) {
   console.log('exiting the TCP Connection to client');
   client.close();
-})
+});
+
+
+function cleanup(tasks){
+  tasks = tasks.taskset.periodictask;
+  for(var task in tasks){
+    delete tasks[task].ucfirmrt;
+    delete tasks[task].uawmean;
+  }
+  return tasks;
+}
