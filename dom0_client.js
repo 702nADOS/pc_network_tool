@@ -74,12 +74,13 @@ dom0_client.prototype.init = function(options) {
   this.clientSocket.on('data', function(data) {
 
     console.log(data);
-    console.log(getInt32LE(this.magic_numbers['go_send']));
+    //console.log(getInt32LE(this.magic_numbers['go_send']));
 
     // if the client is ready to receive the next task binary
     // send the next binary from the queue
     //if(data.compare(getInt32LE(this.magic_numbers['go_send']))){
     if(areBuffersEqual(data, getInt32LE(this.magic_numbers['go_send']))){
+      client.emit('sendNextBinary');
       console.log('Client is ready to get next task')
       this.sendNextTask();
     }

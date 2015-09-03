@@ -43,9 +43,9 @@ process.stdin.on('data', function(){
   //console.log('arguments');
   //console.log('got message');
   //client.sendNextTask());
-  client.sendLua("test = L4.default_loader:start({caps={l4re_ipc = L4.Env.l4re_ipc}},\"avinash2:n\");");
   //sleep(1000)
   client.sendLua("test = L4.default_loader:start({caps={l4re_ipc = L4.Env.l4re_ipc}},\"avinash1:n\");");
+  client.sendLua("test = L4.default_loader:start({caps={l4re_ipc = L4.Env.l4re_ipc}},\"avinash2:n\");");
 });
 
 /*
