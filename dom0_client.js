@@ -88,18 +88,6 @@ dom0_client.prototype.init = function(options) {
 
   }.bind(this));
 
-  // start listening on a seperate port and create handlers for them as well.
-  //this.monitorSocket = net.createServer(function(socket){
-    //console.log('CONNECTED: '+ sock.remoteAddress + ':' + sock.remotePort);
-
-    //sock.on('data', function(data) {
-      //console.log('DATA ' + sock.remoteAddress + ': ' + data);
-    //});
-
-    //sock.on('close', function(data) {
-      //console.log('CLOSED: ' + sock.remoteAddress +' '+ sock.remotePort);
-    //});
-  //}).listen(options.mon_client.port, options.mon_client.host);
 };
 
 /*
@@ -123,13 +111,6 @@ dom0_client.prototype.sendControl = function() {
 dom0_client.prototype.sendLua = function(message) {
   debug.log('sending lua meesage to the server '+ message);
 
-  // protocol is to send LUA control message first
-  //                then send the length of the message
-  //                then send the message
-  //console.log(this.magic_numbers.lua);
-  //var lua = new Buffer(4);
-  //lua.writeUInt32LE(this.magic_numbers.lua, 0);
-  //this.clientSocket.write(lua);
   this.clientSocket.write(getInt32LE(this.magic_numbers.lua));
   console.log(getInt32LE);
   debug.log('send message length ');
@@ -198,41 +179,22 @@ dom0_client.prototype.sendTaskDescription = function(tasks){
 
   this.writeToClient(tasks_string.length);
   this.writeToClient(tasks_string, false);
+};
 
+dom0_client.prototype.sendBinary = function(){
   this.send_queue.push({
-    name : "avinash1",
-    binary_path : "binaries/hello.elf"
+    name : "heybinar",
+    binary_path : "_bin/hey"
   });
   this.send_queue.push({
-    name : "avinash2",
-    binary_path : "binaries/tumatmul.elf"
+    name : "namasteb",
+    binary_path : "_bin/namaste"
   });
 
   this.writeToClient(this.magic_numbers.send_binaries);
   this.writeToClient(2);
   this.sendNextTask();
-
-  //this.writeToClient("avinash1", false);
-  //var binary = fs.readFileSync('binaries/hello.elf');
-  //sleep(6000);
-  //this.clientSocket.write(getInt32LE(binary.length));
-  //this.clientSocket.write(binary, function(){
-    //console.log("hello written, writing tumatmul");
-    //sleep(10000);
-    //this.writeToClient("avinash2", false);
-    //var binary = fs.readFileSync('binaries/tumatmul.elf');
-    //sleep(6000);
-    //this.clientSocket.write(getInt32LE(binary.length));
-    //this.clientSocket.write(binary, function(){ console.log("tumatmul written"); });
-  //}.bind(this));
-
-
-
-  //tasks.forEach(function(task, index){
-    //console.log(task.pkg);
-  //});
-};
-
+}
 /**
  *  function sendNextTask: sends a task binary to the server
  */
@@ -249,6 +211,18 @@ dom0_client.prototype.sendNextTask = function(){
     this.clientSocket.write(binary, function(){ console.log(task.name+" written"); }.bind(this));
   }
 }
+
+/**
+ *  function sendTaskDescription: sends a task description to server
+ *           and then continues to send the binaries one by one.
+ *  parameters:
+ *    tasks : JSON representation of the tasks.xml file,
+ *            contains the list of tasks with some basic paramters
+ */
+dom0_client.prototype.start = function(){
+  debug.log('sending taskDescription to the server');
+  this.writeToClient(this.magic_numbers.start);
+};
 
 /*
  * function close : closes the socket connection

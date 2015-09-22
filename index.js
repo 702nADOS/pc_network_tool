@@ -23,29 +23,26 @@ var tasks = xml2json.toJson(xml);
 tasks = JSON.parse(tasks);
 tasks = cleanup(tasks);
 
+var xml = fs.readFileSync('tasks2.xml');
+var tasks2 = xml2json.toJson(xml);
+tasks2 = JSON.parse(tasks2);
+tasks2 = cleanup(tasks2);
+
 var client = new dom0_client();
 
 client.init({server_details: server_details, mon_client: monitor_client_details});
 
 client.on('connected', function(){
   console.log('connected');
-  //client.sendLua(" package.path = \"rom/?.lua\"; json=require('json')");
-  //sleep (1000);
   client.sendLua("print 'hello';");
-  //sleep(1000);
   client.sendTaskDescription(tasks);
-
-//  sleep(200000);
-  //client.close();
+  //client.sendTaskDescription(tasks2);
+  client.sendBinary();
 });
 
 process.stdin.on('data', function(){
-  //console.log('arguments');
-  //console.log('got message');
-  //client.sendNextTask());
-  //sleep(1000)
-  client.sendLua("test = L4.default_loader:start({caps={l4re_ipc = L4.Env.l4re_ipc}},\"avinash1:n\");");
-  client.sendLua("test = L4.default_loader:start({caps={l4re_ipc = L4.Env.l4re_ipc}},\"avinash2:n\");");
+  client.start();
+  client.sendTaskDescription(tasks2);
 });
 
 /*
