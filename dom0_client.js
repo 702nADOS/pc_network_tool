@@ -37,7 +37,9 @@ var net = require('net'),
     debug = require('./debug.js'),
     sleep = require('node-sleep').sleep,
     EventEmitter = require( "events" ).EventEmitter,
-    fs = require('fs');
+    fs = require('fs'),
+    colors = require('colors')
+    ;
 
 var dom0_client = function() {
   this.server_details = {}; // JS Object, details of the client Server, host and port
@@ -73,7 +75,6 @@ dom0_client.prototype.init = function(options) {
 
   this.clientSocket.on('data', function(data) {
 
-    console.log(data);
     //console.log(getInt32LE(this.magic_numbers['go_send']));
 
     // if the client is ready to receive the next task binary
@@ -83,8 +84,10 @@ dom0_client.prototype.init = function(options) {
       client.emit('sendNextBinary');
       console.log('Client is ready to get next task')
       this.sendNextTask();
+      return;
     }
-    //console.log(data);
+    // XXX doing the +'' to make the number ot a string. fancy JS Hack
+    console.log((data.readInt32LE(0)+'').grey);
 
   }.bind(this));
 
@@ -140,7 +143,7 @@ dom0_client.prototype.sendBinary = function(binary) {
   this.clientSocket.write(getInt32LE(binary.length));
 
   debug.log('expecting an OK by this time');
-  sleep(3000);
+  //sleep(3000);
 
   // TODO: wait for GO_SEND here. need to make these parts more elegant
   this.clientSocket.write(binary, function(){
@@ -181,15 +184,17 @@ dom0_client.prototype.sendTaskDescription = function(tasks){
   this.writeToClient(tasks_string, false);
 };
 
-dom0_client.prototype.sendBinary = function(){
-  this.send_queue.push({
-    name : "heybinar",
-    binary_path : "_bin/hey"
-  });
-  this.send_queue.push({
-    name : "namasteb",
-    binary_path : "_bin/namaste"
-  });
+dom0_client.prototype.sendBinary = function(binaries){
+  for(var binary in binaries){
+    this.send_queue.push({
+      name : binaries[binary],
+      binary_path : "_bin/"+binaries[binary]
+    });
+  }
+  //this.send_queue.push({
+    //name : "namasteb",
+    //binary_path : "_bin/namaste"
+  //});
 
   this.writeToClient(this.magic_numbers.send_binaries);
   this.writeToClient(2);
@@ -220,7 +225,7 @@ dom0_client.prototype.sendNextTask = function(){
  *            contains the list of tasks with some basic paramters
  */
 dom0_client.prototype.start = function(){
-  debug.log('sending taskDescription to the server');
+  debug.log('starting tasks on the server');
   this.writeToClient(this.magic_numbers.start);
 };
 
@@ -247,7 +252,7 @@ dom0_client.prototype.writeToClient = function(hex, LE){
   else
     this.clientSocket.write(hex);
 
-  sleep(1000);
+  //sleep(1000);
 }
 
 module.exports = dom0_client;

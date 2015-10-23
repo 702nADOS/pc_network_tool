@@ -3,8 +3,11 @@ var xml2json = require('xml2json'),
     fs = require('fs'),
     dom0_client = require('./dom0_client.js'),
     magic_numbers = require('./magic_numbers.js'),
-    sleep = require('node-sleep').sleep
+    sleep = require('node-sleep').sleep,
+    readline = require('readline')
     ;
+var client,
+    clientConnected = false;
 
 // XXX: Config
 var tasksFile = 'tasks.xml';
@@ -21,29 +24,93 @@ var monitor_client_details = {
 var xml = fs.readFileSync(tasksFile);
 var tasks = xml2json.toJson(xml);
 tasks = JSON.parse(tasks);
-tasks = cleanup(tasks);
+processed_tasks = cleanup(tasks);
+tasks = processed_tasks.tasks;
+binaries = processed_tasks.binaries;
 
-var xml = fs.readFileSync('tasks2.xml');
-var tasks2 = xml2json.toJson(xml);
-tasks2 = JSON.parse(tasks2);
-tasks2 = cleanup(tasks2);
+// client showcase
 
-var client = new dom0_client();
-
-client.init({server_details: server_details, mon_client: monitor_client_details});
-
-client.on('connected', function(){
-  console.log('connected');
-  client.sendLua("print 'hello';");
-  client.sendTaskDescription(tasks);
-  //client.sendTaskDescription(tasks2);
-  client.sendBinary();
+var rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
 });
+rl.setPrompt('> ');
 
-process.stdin.on('data', function(){
-  client.start();
-  client.sendTaskDescription(tasks2);
-});
+printHelp();
+
+rl.on('line', function(cmd){
+  switch(cmd){
+    case 'q':
+      if(isClientConnected())
+        client.close();
+      process.exit();
+      break;
+    case 'connect':
+      client = new dom0_client();
+      client.init({server_details: server_details, mon_client: monitor_client_details});
+      client.on('connected', function(){
+        console.log('connected');
+        clientConnected = true;
+      });
+      break;
+    case 'lua':
+      if(isClientConnected())
+        client.sendLua("print 'hello';");
+      break;
+    case 'task':
+      if(isClientConnected())
+        client.sendTaskDescription(tasks);
+      break;
+    case 'binary':
+      if(isClientConnected())
+        client.sendBinary(binaries);
+      break;
+    case 'start':
+      if(isClientConnected())
+        client.start();
+      break;
+    default:
+      printHelp();
+  };
+  rl.prompt();
+})
+
+
+/*
+ * Helper function for xml parsing
+ */
+
+function printHelp(){
+  console.log('Following functions are available');
+  console.log('q - quit');
+  console.log('connect - start client connection');
+  console.log('lua - send lua Hello');
+  console.log('task - send task description');
+  console.log('binary - send binary');
+  console.log('start - start tasks');
+  console.log('------------------------------------');
+  rl.write('');
+  rl.prompt();
+}
+function cleanup(tasks){
+  tasks = tasks.taskset.periodictask;
+  binaries = [];
+  for(var task in tasks){
+    if (binaries.indexOf(tasks[task].pkg) === -1)
+      binaries.push(tasks[task].pkg);
+    delete tasks[task].ucfirmrt;
+    delete tasks[task].uawmean;
+  }
+  return {
+    tasks: tasks,
+    binaries: binaries
+  }
+}
+
+function isClientConnected(){
+  if(clientConnected) return true;
+  else { console.log('client not connected'); return false;}
+}
 
 /*
  * TASK EXAMPLE
@@ -56,18 +123,3 @@ process.stdin.on('data', function(){
   period: 4,
   offset: 0
 }*/
-
-process.on('SIGINT', function(code) {
-  console.log('exiting the TCP Connection to client');
-  client.close();
-});
-
-
-function cleanup(tasks){
-  tasks = tasks.taskset.periodictask;
-  for(var task in tasks){
-    delete tasks[task].ucfirmrt;
-    delete tasks[task].uawmean;
-  }
-  return tasks;
-}
